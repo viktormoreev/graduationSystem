@@ -1,0 +1,13 @@
+package com.example.graduationSystem;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class GraduationSystem {
+
+	public static void main(String[] args) {
+		SpringApplication.run(GraduationSystem.class, args);
+	}
+
+}
