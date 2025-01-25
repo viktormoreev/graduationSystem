@@ -1,13 +1,17 @@
 package com.example.graduationSystem.service.implementation;
 
 import com.example.graduationSystem.dtos.StudentDto;
+import com.example.graduationSystem.dtos.StudentRegistrationRequest;
+import com.example.graduationSystem.dtos.UpdateStudentDto;
 import com.example.graduationSystem.dtos.UserIDRequest;
 import com.example.graduationSystem.entity.Student;
 import com.example.graduationSystem.mapper.EntityMapper;
 import com.example.graduationSystem.repository.StudentRepository;
 import com.example.graduationSystem.service.StudentService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Optional;
 
 public class StudentServiceImpl implements StudentService {
@@ -22,30 +26,50 @@ public class StudentServiceImpl implements StudentService {
     private StudentRepository studentRepository;
 
     @Override
-    public StudentDto addStudent(UserIDRequest userIDRequest) {
-        Student student = Student.builder()
+    public List<StudentDto> getAllStudents() {
+        return null;
+    }
+
+    @Override
+    public StudentDto getStudentById(Long id) {
+        return null;
+    }
+
+    @Override
+    public StudentDto getStudentByUId(String uid) {
+        return null;
+    }
+
+    @Override
+    public StudentDto addStudent(UserIDRequest userIDRequest, String name) {
+        final Student student = Student.builder()
                 .userID(userIDRequest.getUserID())
+                .name(name)
                 .build();
         studentRepository.save(student);
         return entityMapper.mapToStudentDto(student);
     }
 
     @Override
-    public boolean deleteStudentUID(String userId) {
-        Optional<Student> student = studentRepository.findByUserID(userId);
+    public void deleteStudentByUID(String userId) {
+        final Optional<Student> student = studentRepository.findByUserID(userId);
         if (student.isPresent()) {
             studentRepository.delete(student.get());
-            return true;
         }
-        return false;
+        throw new EntityNotFoundException("Student with ID " + userId + " not found");
     }
 
     @Override
-    public boolean deleteStudentID(Long ID) {
+    public void deleteStudentByID(Long ID) {
         if (studentRepository.existsById(ID)) {
             studentRepository.deleteById(ID);
-            return true;
         }
-        return false;
+        throw new EntityNotFoundException("Student with ID " + ID + " not found");
     }
+
+    @Override
+    public StudentDto updateStudent(UpdateStudentDto updateStudentDto) {
+        return null;
+    }
+
 }

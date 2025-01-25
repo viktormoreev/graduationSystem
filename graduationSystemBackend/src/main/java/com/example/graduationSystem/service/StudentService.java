@@ -1,12 +1,24 @@
 package com.example.graduationSystem.service;
 
 import com.example.graduationSystem.dtos.StudentDto;
+import com.example.graduationSystem.dtos.UpdateStudentDto;
 import com.example.graduationSystem.dtos.UserIDRequest;
 
+import java.util.List;
+
 public interface StudentService {
-    StudentDto addStudent(UserIDRequest userIDRequest);
+    List<StudentDto> getAllStudents();
 
-    boolean deleteStudentUID(String userId);
+    StudentDto getStudentById(Long id);
 
-    boolean deleteStudentID(Long ID);
+    StudentDto getStudentByUId(String uid);
+
+    StudentDto addStudent(UserIDRequest userIDRequest, String name);
+
+    void deleteStudentByUID(String userId);
+
+    void deleteStudentByID(Long ID);
+
+    StudentDto updateStudent(UpdateStudentDto updateStudentDto);
+
 }

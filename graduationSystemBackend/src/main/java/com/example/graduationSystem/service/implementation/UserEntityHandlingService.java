@@ -3,6 +3,9 @@ package com.example.graduationSystem.service.implementation;
 
 import com.example.graduationSystem.dtos.ApiResponse;
 import com.example.graduationSystem.dtos.UserIDRequest;
+import com.example.graduationSystem.enums.Title;
+import com.example.graduationSystem.exceptions.FailedToAssignRoleException;
+import com.example.graduationSystem.exceptions.UserNotFoundException;
 import com.example.graduationSystem.service.StudentService;
 import com.example.graduationSystem.service.ProfessorService;
 import org.keycloak.admin.client.resource.UserResource;
@@ -13,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import javax.management.relation.RoleNotFoundException;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +37,7 @@ public class UserEntityHandlingService {
     @Autowired
     private StudentService studentService;
 
+ /*
     public ApiResponse<String> switchUserRoleByUsername(String username, String newRoleName) {
         if (username == null || username.isEmpty() || newRoleName == null || newRoleName.isEmpty()) {
             return new ApiResponse<>(false, "Username or new role name cannot be null or empty", null);
@@ -57,6 +61,7 @@ public class UserEntityHandlingService {
             return new ApiResponse<>(false, "Failed to switch role: " + e.getMessage(), null);
         }
     }
+
 
     public ApiResponse<String> switchUserRole(String userId, String newRoleName) {
         if (userId == null || userId.isEmpty() || newRoleName == null || newRoleName.isEmpty()) {
@@ -94,6 +99,8 @@ public class UserEntityHandlingService {
             return new ApiResponse<>(false, "Failed to switch role: " + e.getMessage(), null);
         }
     }
+
+     */
 
     public ApiResponse<String> deleteUser(String userId) {
         try {
@@ -143,6 +150,7 @@ public class UserEntityHandlingService {
         }
     }
 
+    /*
     public ApiResponse<String> assignRoleUsername(String username, String roleName) {
         try {
             UserRepresentation user = keycloakAdminClientService.keycloak.realm(keycloakAdminClientService.keycloakRealm).users().search(username).get(0);
@@ -153,15 +161,13 @@ public class UserEntityHandlingService {
         }
     }
 
+     */
 
-    public ApiResponse<String> assignRole(String userId, String roleName) {
-        if (userId == null || userId.isEmpty() || roleName == null || roleName.isEmpty()) {
-            return new ApiResponse<>(false, "User ID or role name cannot be null or empty", null);
-        }
 
+    public ApiResponse<String> assignStudentRole(String userId,String name){
         try {
-            RoleRepresentation role = keycloakAdminClientService.keycloak.realm(keycloakAdminClientService.keycloakRealm).roles().get(roleName).toRepresentation();
-            if (role == null) {
+            RoleRepresentation role = keycloakAdminClientService.keycloak.realm(keycloakAdminClientService.keycloakRealm).roles().get("student").toRepresentation();
+            if (role.equals(null)) {
                 return new ApiResponse<>(false, "Role not found", null);
             }
 
@@ -173,7 +179,7 @@ public class UserEntityHandlingService {
             userResource.roles().realmLevel().add(Collections.singletonList(role));
 
             // Create respective entity in the database
-            createEntityForRole(userId, roleName);
+            createEntityForStudent(userId, name);
 
             return new ApiResponse<>(true, "Role assigned successfully", null);
         } catch (Exception e) {
@@ -182,26 +188,47 @@ public class UserEntityHandlingService {
         }
     }
 
-    private void createEntityForRole(String userId, String roleName) {
-        switch (roleName.toLowerCase()) {
-            case "teacher":
-                professorService.addProfessor(new UserIDRequest(userId));
-                break;
-            case "student":
-                studentService.addStudent(new UserIDRequest(userId));
-                break;
+    public ApiResponse<String> assignProfessorRole(String userId,String name, Title title, Long departmentId){
+        try {
+            RoleRepresentation role = keycloakAdminClientService.keycloak.realm(keycloakAdminClientService.keycloakRealm).roles().get("professor").toRepresentation();
+            if (role.equals(null)) {
+                throw new RoleNotFoundException("Role not found");
+            }
+
+            UserResource userResource = keycloakAdminClientService.keycloak.realm(keycloakAdminClientService.keycloakRealm).users().get(userId);
+            if (userResource.equals(null)) {
+                throw new UserNotFoundException("User not found");
+            }
+
+            userResource.roles().realmLevel().add(Collections.singletonList(role));
+
+            // Create respective entity in the database
+            createEntityForProfessor(userId, name, title, departmentId);
+
+            return new ApiResponse<>(true, "Role assigned successfully", null);
+        } catch (Exception e) {
+            logger.error("Error assigning role: {}", e.getMessage(), e);
+            throw new FailedToAssignRoleException("Failed to assign role: ", e.getMessage());
         }
+    }
+
+    private void createEntityForStudent(String userId, String name){
+        studentService.addStudent(new UserIDRequest(userId), name);
+    }
+
+    private void createEntityForProfessor(String userId, String name, Title title, Long departmentId){
+        professorService.addProfessor(new UserIDRequest(userId), name, title, departmentId);
     }
 
     private void deleteEntityForRole(String userId, String roleName) {
         switch (roleName.toLowerCase()) {
-            case "teacher":
+            case "professor":
                 professorService.deleteProfessorUID(userId);
                 break;
             case "student":
-                studentService.deleteStudentUID(userId);
+                studentService.deleteStudentByUID(userId);
                 break;
-            // No entity deletion for admin
+            default:
         }
     }
 
