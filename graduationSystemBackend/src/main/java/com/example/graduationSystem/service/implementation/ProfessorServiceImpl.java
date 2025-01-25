@@ -11,16 +11,18 @@ import com.example.graduationSystem.repository.ProfessorRepository;
 import com.example.graduationSystem.service.ProfessorService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class ProfessorServiceImpl implements ProfessorService {
 
     @Autowired
     private EntityMapper entityMapper;
 
     @Autowired
-    private KeycloakAdminClientService keycloakAdminClientService;
+    private KeycloakAdminClientServiceImpl keycloakAdminClientServiceImpl;
 
     @Autowired
     private ProfessorRepository professorRepository;

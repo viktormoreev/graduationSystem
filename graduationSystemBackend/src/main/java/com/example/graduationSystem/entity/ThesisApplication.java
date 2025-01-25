@@ -16,7 +16,7 @@ import java.util.Date;
 @Builder
 @Table(name = "thesis_applications")
 public class ThesisApplication extends IdGenerator{
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false, length = 500)

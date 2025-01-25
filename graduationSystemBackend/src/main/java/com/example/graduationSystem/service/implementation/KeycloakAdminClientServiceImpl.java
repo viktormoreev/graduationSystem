@@ -27,9 +27,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class KeycloakAdminClientService {
+public class KeycloakAdminClientServiceImpl {
 
-    private static final Logger logger = LoggerFactory.getLogger(KeycloakAdminClientService.class);
+    private static final Logger logger = LoggerFactory.getLogger(KeycloakAdminClientServiceImpl.class);
 
     @Value("${keycloak.auth-server-url}")
     public String keycloakAdminUrl;
@@ -49,12 +49,11 @@ public class KeycloakAdminClientService {
     @Autowired
     public Keycloak keycloak;
 
-    public static final List<String> VALID_ROLES = Arrays.asList("admin", "teacher", "student");
-
+    public static final List<String> VALID_ROLES = Arrays.asList("admin", "professor", "student");
 
     private final RestTemplate restTemplate;
 
-    public KeycloakAdminClientService(RestTemplate restTemplate) {
+    public KeycloakAdminClientServiceImpl(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
@@ -105,7 +104,6 @@ public class KeycloakAdminClientService {
         }
     }
 
-
     public ApiResponse<String> createUser(String username, String password) {
         logger.info("Creating user: {}", username);
         try {
@@ -132,9 +130,6 @@ public class KeycloakAdminClientService {
             return new ApiResponse<>(false, "Failed to create user", null);
         }
     }
-
-
-
 
     public ApiResponse<String> updateUserCredentials(UserUpdateCredentialsRequest userUpdateCredentialsRequest) {
         try {

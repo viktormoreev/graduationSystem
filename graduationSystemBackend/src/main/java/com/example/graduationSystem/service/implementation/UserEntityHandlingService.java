@@ -20,7 +20,7 @@ import javax.management.relation.RoleNotFoundException;
 import java.util.Collections;
 import java.util.List;
 
-import static com.example.graduationSystem.service.implementation.KeycloakAdminClientService.VALID_ROLES;
+import static com.example.graduationSystem.service.implementation.KeycloakAdminClientServiceImpl.VALID_ROLES;
 
 @Service
 public class UserEntityHandlingService {
@@ -29,7 +29,7 @@ public class UserEntityHandlingService {
     private static final Logger logger = LoggerFactory.getLogger(UserEntityHandlingService.class);
 
     @Autowired
-    private KeycloakAdminClientService keycloakAdminClientService;
+    private KeycloakAdminClientServiceImpl keycloakAdminClientServiceImpl;
 
     @Autowired
     private ProfessorService professorService;
@@ -104,7 +104,7 @@ public class UserEntityHandlingService {
 
     public ApiResponse<String> deleteUser(String userId) {
         try {
-            UserResource userResource = keycloakAdminClientService.keycloak.realm(keycloakAdminClientService.keycloakRealm).users().get(userId);
+            UserResource userResource = keycloakAdminClientServiceImpl.keycloak.realm(keycloakAdminClientServiceImpl.keycloakRealm).users().get(userId);
             List<RoleRepresentation> currentRoles = userResource.roles().realmLevel().listAll();
 
             for (RoleRepresentation role : currentRoles) {
@@ -116,7 +116,7 @@ public class UserEntityHandlingService {
                 }
             }
 
-            keycloakAdminClientService.keycloak.realm(keycloakAdminClientService.keycloakRealm).users().delete(userId);
+            keycloakAdminClientServiceImpl.keycloak.realm(keycloakAdminClientServiceImpl.keycloakRealm).users().delete(userId);
 
             return new ApiResponse<>(true, "User deleted successfully", null);
         } catch (Exception e) {
@@ -127,7 +127,7 @@ public class UserEntityHandlingService {
 
     public ApiResponse<String> deleteUserByUsername(String username) {
         try {
-            UserRepresentation user = keycloakAdminClientService.keycloak.realm(keycloakAdminClientService.keycloakRealm).users().search(username).get(0);
+            UserRepresentation user = keycloakAdminClientServiceImpl.keycloak.realm(keycloakAdminClientServiceImpl.keycloakRealm).users().search(username).get(0);
 
             return deleteUser(user.getId());
         } catch (Exception e) {
@@ -138,8 +138,8 @@ public class UserEntityHandlingService {
 
     public ApiResponse<String> removeRole(String userId, String roleName) {
         try {
-            RoleRepresentation role = keycloakAdminClientService.keycloak.realm(keycloakAdminClientService.keycloakRealm).roles().get(roleName).toRepresentation();
-            keycloakAdminClientService.keycloak.realm(keycloakAdminClientService.keycloakRealm).users().get(userId).roles().realmLevel().remove(Collections.singletonList(role));
+            RoleRepresentation role = keycloakAdminClientServiceImpl.keycloak.realm(keycloakAdminClientServiceImpl.keycloakRealm).roles().get(roleName).toRepresentation();
+            keycloakAdminClientServiceImpl.keycloak.realm(keycloakAdminClientServiceImpl.keycloakRealm).users().get(userId).roles().realmLevel().remove(Collections.singletonList(role));
 
             deleteEntityForRole(userId, roleName);
 
@@ -166,12 +166,12 @@ public class UserEntityHandlingService {
 
     public ApiResponse<String> assignStudentRole(String userId,String name){
         try {
-            RoleRepresentation role = keycloakAdminClientService.keycloak.realm(keycloakAdminClientService.keycloakRealm).roles().get("student").toRepresentation();
+            RoleRepresentation role = keycloakAdminClientServiceImpl.keycloak.realm(keycloakAdminClientServiceImpl.keycloakRealm).roles().get("student").toRepresentation();
             if (role.equals(null)) {
                 return new ApiResponse<>(false, "Role not found", null);
             }
 
-            UserResource userResource = keycloakAdminClientService.keycloak.realm(keycloakAdminClientService.keycloakRealm).users().get(userId);
+            UserResource userResource = keycloakAdminClientServiceImpl.keycloak.realm(keycloakAdminClientServiceImpl.keycloakRealm).users().get(userId);
             if (userResource == null) {
                 return new ApiResponse<>(false, "User not found", null);
             }
@@ -190,12 +190,12 @@ public class UserEntityHandlingService {
 
     public ApiResponse<String> assignProfessorRole(String userId,String name, Title title, Long departmentId){
         try {
-            RoleRepresentation role = keycloakAdminClientService.keycloak.realm(keycloakAdminClientService.keycloakRealm).roles().get("professor").toRepresentation();
+            RoleRepresentation role = keycloakAdminClientServiceImpl.keycloak.realm(keycloakAdminClientServiceImpl.keycloakRealm).roles().get("professor").toRepresentation();
             if (role.equals(null)) {
                 throw new RoleNotFoundException("Role not found");
             }
 
-            UserResource userResource = keycloakAdminClientService.keycloak.realm(keycloakAdminClientService.keycloakRealm).users().get(userId);
+            UserResource userResource = keycloakAdminClientServiceImpl.keycloak.realm(keycloakAdminClientServiceImpl.keycloakRealm).users().get(userId);
             if (userResource.equals(null)) {
                 throw new UserNotFoundException("User not found");
             }

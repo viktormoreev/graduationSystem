@@ -1,6 +1,5 @@
 package com.example.graduationSystem.entity;
 
-import com.example.graduationSystem.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 

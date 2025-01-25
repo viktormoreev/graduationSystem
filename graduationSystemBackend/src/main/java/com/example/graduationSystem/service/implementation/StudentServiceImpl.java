@@ -1,7 +1,6 @@
 package com.example.graduationSystem.service.implementation;
 
 import com.example.graduationSystem.dtos.StudentDto;
-import com.example.graduationSystem.dtos.StudentRegistrationRequest;
 import com.example.graduationSystem.dtos.UpdateStudentDto;
 import com.example.graduationSystem.dtos.UserIDRequest;
 import com.example.graduationSystem.entity.Student;
@@ -10,17 +9,19 @@ import com.example.graduationSystem.repository.StudentRepository;
 import com.example.graduationSystem.service.StudentService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private EntityMapper entityMapper;
 
     @Autowired
-    private KeycloakAdminClientService keycloakAdminClientService;
+    private KeycloakAdminClientServiceImpl keycloakAdminClientServiceImpl;
 
     @Autowired
     private StudentRepository studentRepository;

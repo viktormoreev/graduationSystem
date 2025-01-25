@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ProfessorDto {
 
     @NotNull(message = "User ID cannot be null")

@@ -1,5 +1,6 @@
 package com.example.graduationSystem.dtos;
 
+import com.example.graduationSystem.entity.Professor;
 import lombok.*;
 
 import java.util.List;
@@ -9,8 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class StudentDto {
-    private String userID;
+public class DepartmentDto {
     private String name;
-    private List<Long> thesis;
+    private List<ProfessorDto> professors;
 }

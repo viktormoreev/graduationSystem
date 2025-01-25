@@ -2,7 +2,7 @@ package com.example.graduationSystem.controller;
 
 
 import com.example.graduationSystem.dtos.*;
-import com.example.graduationSystem.service.implementation.KeycloakAdminClientService;
+import com.example.graduationSystem.service.implementation.KeycloakAdminClientServiceImpl;
 import com.example.graduationSystem.service.implementation.UserEntityHandlingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,18 +16,18 @@ import java.util.Map;
 @RequestMapping("api/v1/auth")
 public class UserController {
 
-    private final KeycloakAdminClientService keycloakAdminClientService;
+    private final KeycloakAdminClientServiceImpl keycloakAdminClientServiceImpl;
 
     private final UserEntityHandlingService userEntityHandlingService;
 
-    public UserController(KeycloakAdminClientService keycloakAdminClientService, UserEntityHandlingService userEntityHandlingService) {
-        this.keycloakAdminClientService = keycloakAdminClientService;
+    public UserController(KeycloakAdminClientServiceImpl keycloakAdminClientServiceImpl, UserEntityHandlingService userEntityHandlingService) {
+        this.keycloakAdminClientServiceImpl = keycloakAdminClientServiceImpl;
         this.userEntityHandlingService = userEntityHandlingService;
     }
 
     @PostMapping("/register-professor")
     public ResponseEntity<String> registerProfessor(@RequestBody ProfessorRegistrationRequest request) {
-        ApiResponse<String> response = keycloakAdminClientService.createUser(request.getUsername(), request.getPassword());
+        ApiResponse<String> response = keycloakAdminClientServiceImpl.createUser(request.getUsername(), request.getPassword());
 
         if (!response.isSuccess()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.getMessage());
@@ -44,7 +44,7 @@ public class UserController {
 
     @PostMapping("/register-student")
     public ResponseEntity<String> registerStudent(@RequestBody StudentRegistrationRequest request) {
-        ApiResponse<String> response = keycloakAdminClientService.createUser(request.getUsername(), request.getPassword());
+        ApiResponse<String> response = keycloakAdminClientServiceImpl.createUser(request.getUsername(), request.getPassword());
 
         if (!response.isSuccess()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.getMessage());
@@ -61,7 +61,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody UserAuthorizationRequest userAuthorizationRequest) {
-        ApiResponse<Map<String, Object>> response = keycloakAdminClientService.loginUser(userAuthorizationRequest.getUsername(), userAuthorizationRequest.getPassword());
+        ApiResponse<Map<String, Object>> response = keycloakAdminClientServiceImpl.loginUser(userAuthorizationRequest.getUsername(), userAuthorizationRequest.getPassword());
         if (response.isSuccess()) {
             return ResponseEntity.ok(response.getData());
         } else {
@@ -71,7 +71,7 @@ public class UserController {
 
     @GetMapping("/info")
     public ResponseEntity<UserInfoResponse> getUserInfo(@AuthenticationPrincipal Jwt jwt) {
-        ApiResponse<UserInfoResponse> response = keycloakAdminClientService.getUserInfo(jwt);
+        ApiResponse<UserInfoResponse> response = keycloakAdminClientServiceImpl.getUserInfo(jwt);
         if (response.isSuccess()) {
             return ResponseEntity.ok(response.getData());
         } else {
@@ -125,7 +125,7 @@ public class UserController {
 
     @PutMapping("/update-credentials")
     public ResponseEntity<String> updateUserCredentials(@RequestBody UserUpdateCredentialsRequest userUpdateCredentialsRequest) {
-        ApiResponse<String> response = keycloakAdminClientService.updateUserCredentials(userUpdateCredentialsRequest);
+        ApiResponse<String> response = keycloakAdminClientServiceImpl.updateUserCredentials(userUpdateCredentialsRequest);
         if (response.isSuccess()) {
             return ResponseEntity.ok(response.getMessage());
         } else {
@@ -150,7 +150,7 @@ public class UserController {
 
     @GetMapping("/users")
     public ResponseEntity<Map<String, String>> getUsers() {
-        ApiResponse<Map<String, String>> response = keycloakAdminClientService.getAllUsersAndRoles();
+        ApiResponse<Map<String, String>> response = keycloakAdminClientServiceImpl.getAllUsersAndRoles();
         if (response.isSuccess()) {
             return ResponseEntity.ok(response.getData());
         } else {
