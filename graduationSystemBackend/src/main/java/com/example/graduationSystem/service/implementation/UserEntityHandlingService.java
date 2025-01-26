@@ -164,19 +164,28 @@ public class UserEntityHandlingService {
      */
 
 
-    public ApiResponse<String> assignStudentRole(String userId,String name){
+    public ApiResponse<String> assignStudentRole(String userId, String name) {
         try {
-            RoleRepresentation role = keycloakAdminClientServiceImpl.keycloak.realm(keycloakAdminClientServiceImpl.keycloakRealm).roles().get("student").toRepresentation();
+            RoleRepresentation role = keycloakAdminClientServiceImpl.keycloak
+                    .realm(keycloakAdminClientServiceImpl.keycloakRealm)
+                    .roles()
+                    .get("student")
+                    .toRepresentation();
             if (role.equals(null)) {
                 return new ApiResponse<>(false, "Role not found", null);
             }
 
-            UserResource userResource = keycloakAdminClientServiceImpl.keycloak.realm(keycloakAdminClientServiceImpl.keycloakRealm).users().get(userId);
+            UserResource userResource = keycloakAdminClientServiceImpl.keycloak
+                    .realm(keycloakAdminClientServiceImpl.keycloakRealm)
+                    .users()
+                    .get(userId);
             if (userResource == null) {
                 return new ApiResponse<>(false, "User not found", null);
             }
 
-            userResource.roles().realmLevel().add(Collections.singletonList(role));
+            userResource.roles()
+                    .realmLevel()
+                    .add(Collections.singletonList(role));
 
             // Create respective entity in the database
             createEntityForStudent(userId, name);
@@ -188,7 +197,7 @@ public class UserEntityHandlingService {
         }
     }
 
-    public ApiResponse<String> assignProfessorRole(String userId,String name, Title title, Long departmentId){
+    public ApiResponse<String> assignProfessorRole(String userId, String name, Title title, Long departmentId) {
         try {
             RoleRepresentation role = keycloakAdminClientServiceImpl.keycloak.realm(keycloakAdminClientServiceImpl.keycloakRealm).roles().get("professor").toRepresentation();
             if (role.equals(null)) {
@@ -212,11 +221,11 @@ public class UserEntityHandlingService {
         }
     }
 
-    private void createEntityForStudent(String userId, String name){
+    private void createEntityForStudent(String userId, String name) {
         studentService.addStudent(new UserIDRequest(userId), name);
     }
 
-    private void createEntityForProfessor(String userId, String name, Title title, Long departmentId){
+    private void createEntityForProfessor(String userId, String name, Title title, Long departmentId) {
         professorService.addProfessor(new UserIDRequest(userId), name, title, departmentId);
     }
 

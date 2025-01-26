@@ -9,9 +9,10 @@ import lombok.*;
 import java.util.List;
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Builder
 @Table(name = "department")
 public class Department extends IdGenerator {

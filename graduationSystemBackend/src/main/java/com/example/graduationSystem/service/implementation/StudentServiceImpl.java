@@ -47,8 +47,7 @@ public class StudentServiceImpl implements StudentService {
                 .userID(userIDRequest.getUserID())
                 .name(name)
                 .build();
-        studentRepository.save(student);
-        return entityMapper.mapToStudentDto(student);
+        return entityMapper.mapToStudentDto(studentRepository.save(student));
     }
 
     @Override

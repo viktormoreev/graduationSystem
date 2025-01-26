@@ -1,22 +1,20 @@
 package com.example.graduationSystem.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Builder
 @Table(name = "reviews")
 public class Review extends IdGenerator {
-    @Column(name = "professor")
+    @ManyToOne
+    @JoinColumn(name = "professor_id", nullable = false)
     private Professor professor;
 
     @Column(name = "review_text", nullable = false)
@@ -31,4 +29,5 @@ public class Review extends IdGenerator {
     @OneToOne
     @JoinColumn(name = "thesis_id")
     private Thesis thesis;
+
 }

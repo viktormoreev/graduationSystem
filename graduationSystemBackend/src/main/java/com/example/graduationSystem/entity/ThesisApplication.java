@@ -2,18 +2,16 @@ package com.example.graduationSystem.entity;
 
 import com.example.graduationSystem.enums.Status;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Builder
 @Table(name = "thesis_applications")
 public class ThesisApplication extends IdGenerator{
@@ -50,6 +48,4 @@ public class ThesisApplication extends IdGenerator{
     @OneToOne(mappedBy = "application", cascade = CascadeType.ALL)
     private Thesis thesis;
 
-    @OneToOne(mappedBy = "thesis", cascade = CascadeType.ALL)
-    private ThesisDefense defense;
 }

@@ -7,9 +7,10 @@ import lombok.*;
 import java.util.List;
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Builder
 @Table(name = "professors")
 public class Professor extends IdGenerator {
@@ -29,5 +30,9 @@ public class Professor extends IdGenerator {
     @ManyToOne
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
+
+    @OneToMany(mappedBy = "professor")
+    private List<Review> reviews;
+
 
 }

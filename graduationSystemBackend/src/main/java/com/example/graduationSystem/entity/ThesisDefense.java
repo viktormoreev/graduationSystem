@@ -4,24 +4,22 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Builder
 @Table(name = "thesis_defenses")
 public class ThesisDefense extends IdGenerator {
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "thesis_id", nullable = false)
+    @OneToOne
+    @JoinColumn(name = "thesis_id")
     private Thesis thesis;
 
     @Column(name = "defense_date", nullable = false)
