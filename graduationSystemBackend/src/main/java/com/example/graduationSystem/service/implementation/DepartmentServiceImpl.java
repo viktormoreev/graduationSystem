@@ -6,10 +6,12 @@ import com.example.graduationSystem.entity.Department;
 import com.example.graduationSystem.mapper.EntityMapper;
 import com.example.graduationSystem.repository.DepartmentRepository;
 import com.example.graduationSystem.service.DepartmentService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
@@ -27,5 +29,14 @@ public class DepartmentServiceImpl implements DepartmentService {
                 .professors(List.of())
                 .build();
         return entityMapper.mapToDepartmentDto(departmentRepository.save(department));
+    }
+
+    @Override
+    public Department fetchDepartmentById(Long id) {
+        Optional<Department> departmentOptional = departmentRepository.findById(id);
+        if(!departmentOptional.isPresent()){
+            throw new EntityNotFoundException("Department with Id " + id + " is not found");
+        }
+        return departmentOptional.get();
     }
 }

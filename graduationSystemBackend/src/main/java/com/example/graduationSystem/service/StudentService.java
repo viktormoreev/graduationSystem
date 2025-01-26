@@ -3,6 +3,7 @@ package com.example.graduationSystem.service;
 import com.example.graduationSystem.dtos.StudentDto;
 import com.example.graduationSystem.dtos.UpdateStudentDto;
 import com.example.graduationSystem.dtos.UserIDRequest;
+import com.example.graduationSystem.entity.Student;
 
 import java.util.List;
 
@@ -20,5 +21,7 @@ public interface StudentService {
     void deleteStudentByID(Long ID);
 
     StudentDto updateStudent(UpdateStudentDto updateStudentDto);
+
+    Student fetchStudentById(Long id);
 
 }

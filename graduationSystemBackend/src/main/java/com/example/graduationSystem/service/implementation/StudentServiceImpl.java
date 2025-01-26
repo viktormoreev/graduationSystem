@@ -73,4 +73,13 @@ public class StudentServiceImpl implements StudentService {
         return null;
     }
 
+    @Override
+    public Student fetchStudentById(Long id) {
+        Optional<Student> studentOptional = studentRepository.findById(id);
+        if(!studentOptional.isPresent()){
+            throw new EntityNotFoundException("Student with id " + id + " not found");
+        }
+        return studentOptional.get();
+    }
+
 }

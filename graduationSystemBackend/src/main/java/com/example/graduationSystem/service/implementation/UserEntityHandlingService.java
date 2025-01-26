@@ -223,7 +223,7 @@ public class UserEntityHandlingService {
     private void deleteEntityForRole(String userId, String roleName) {
         switch (roleName.toLowerCase()) {
             case "professor":
-                professorService.deleteProfessorUID(userId);
+                professorService.deleteProfessorByUID(userId);
                 break;
             case "student":
                 studentService.deleteStudentByUID(userId);

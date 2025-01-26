@@ -1,20 +1,19 @@
 package com.example.graduationSystem.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ReviewDto {
     private Long professorId;//should change
     private String reviewText;
     private Boolean isApproved;
-    private Date uploadedDate;
+    private LocalDateTime uploadedDate;
     private Long thesisId;
 }

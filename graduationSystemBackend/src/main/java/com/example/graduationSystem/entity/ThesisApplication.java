@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -43,8 +44,8 @@ public class ThesisApplication extends IdGenerator{
     @Column(nullable = false)
     private Status status;
 
-    @Temporal(TemporalType.DATE)
-    private Date submissionDate;
+    @Column(name = "submission_date", nullable = false)
+    private LocalDateTime submissionDate;
 
     @OneToOne(mappedBy = "application", cascade = CascadeType.ALL)
     private Thesis thesis;

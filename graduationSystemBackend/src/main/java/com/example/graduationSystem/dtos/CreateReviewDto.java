@@ -18,6 +18,9 @@ public class CreateReviewDto {
     @NotNull(message = "Review text be null")
     private String reviewText;
 
+    @NotNull
+    private Boolean isApproved;
+
     @NotNull(message = "Thesis ID cannot be null")
     private Long thesisId;
 }

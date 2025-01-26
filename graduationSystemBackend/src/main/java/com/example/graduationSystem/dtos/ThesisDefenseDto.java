@@ -1,10 +1,8 @@
 package com.example.graduationSystem.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -12,9 +10,10 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ThesisDefenseDto {
     private Long thesisId;
-    private Date defenseDate;
+    private LocalDateTime defenseDate;
     private Double grade;
     private Set<Long> committeeMembers;//should change
 }

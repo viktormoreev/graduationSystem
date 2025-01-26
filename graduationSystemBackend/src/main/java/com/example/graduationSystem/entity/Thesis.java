@@ -3,6 +3,7 @@ package com.example.graduationSystem.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -17,7 +18,7 @@ public class Thesis extends IdGenerator{
     private String thesisText;
 
     @Column(name = "uploaded_date", nullable = false)
-    private Date uploadedDate;
+    private LocalDateTime uploadedDate;
 
     @OneToOne(mappedBy = "review", cascade = CascadeType.ALL)
     private Review review;

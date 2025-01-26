@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -23,8 +24,8 @@ public class ThesisDefense extends IdGenerator {
     @JoinColumn(name = "thesis_id", nullable = false)
     private Thesis thesis;
 
-    @Temporal(TemporalType.DATE)
-    private Date defenseDate;
+    @Column(name = "defense_date", nullable = false)
+    private LocalDateTime defenseDate;
 
     @NotNull(message = "Grade must not be null")
     @DecimalMin(value = "2.0", message = "Grade must be at least 2.0")

@@ -1,11 +1,7 @@
 package com.example.graduationSystem.mapper;
 
-import com.example.graduationSystem.dtos.DepartmentDto;
-import com.example.graduationSystem.dtos.ProfessorDto;
-import com.example.graduationSystem.dtos.StudentDto;
-import com.example.graduationSystem.entity.Department;
-import com.example.graduationSystem.entity.Professor;
-import com.example.graduationSystem.entity.Student;
+import com.example.graduationSystem.dtos.*;
+import com.example.graduationSystem.entity.*;
 import com.example.graduationSystem.service.implementation.KeycloakAdminClientServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -61,4 +58,44 @@ public class EntityMapper {
                 .name(department.getName())
                 .build();
     }
+
+    public ReviewDto mapToReviewDto(Review review) {
+        return ReviewDto
+                .builder()
+                .professorId(review.getProfessor().getId())
+                .reviewText(review.getReviewText())
+                .isApproved(review.getIsApproved())
+                .uploadedDate(review.getUploadedDate())
+                .thesisId(review.getThesis().getId())
+                .build();
+    }
+
+    public ThesisApplicationDto mapToThesisApplicationDto(ThesisApplication thesisApplication) {
+        return ThesisApplicationDto.builder()
+                .title(thesisApplication.getTitle())
+                .objectives(thesisApplication.getObjectives())
+                .tasks(thesisApplication.getTasks())
+                .technologies(thesisApplication.getTechnologies())
+                .studentId(thesisApplication.getStudent() != null ? thesisApplication.getStudent().getId() : null)
+                .professorId(thesisApplication.getProfessor() != null ? thesisApplication.getProfessor().getId() : null)
+                .departmentId(thesisApplication.getDepartment() != null ? thesisApplication.getDepartment().getId() : null)
+                .status(thesisApplication.getStatus())
+                .submissionDate(thesisApplication.getSubmissionDate())
+                .build();
+    }
+
+    public ThesisDefenseDto mapToThesisDefenseDto(ThesisDefense thesisDefense) {
+        Set<Long> committeeMemberIds = thesisDefense.getCommitteeMembers() != null ?
+                thesisDefense.getCommitteeMembers().stream()
+                        .map(Professor::getId)
+                        .collect(Collectors.toSet()) : null;
+
+        return ThesisDefenseDto.builder()
+                .thesisId(thesisDefense.getThesis() != null ? thesisDefense.getThesis().getId() : null)
+                .defenseDate(thesisDefense.getDefenseDate())
+                .grade(thesisDefense.getGrade())
+                .committeeMembers(committeeMemberIds)
+                .build();
+    }
+
 }

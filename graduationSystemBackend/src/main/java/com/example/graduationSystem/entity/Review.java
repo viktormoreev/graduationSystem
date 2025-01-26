@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -25,7 +26,7 @@ public class Review extends IdGenerator {
     private Boolean isApproved;
 
     @Column(name = "uploaded_date", nullable = false)
-    private Date uploadedDate;
+    private LocalDateTime uploadedDate;
 
     @OneToOne
     @JoinColumn(name = "thesis_id")
